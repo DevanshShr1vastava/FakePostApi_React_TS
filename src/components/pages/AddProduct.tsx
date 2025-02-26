@@ -74,7 +74,7 @@ const AddProduct = () => {
 
   const onSubmit = (values : z.infer<typeof formSchema>)=>{
     const newProduct:IProductData = {
-      id : productData.length + 1,
+      id : productData.length + 2,
       title : values.title,
       description : values.description,
       image : values.image,
