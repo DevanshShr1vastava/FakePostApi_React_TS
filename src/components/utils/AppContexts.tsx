@@ -1,13 +1,8 @@
 import { createContext } from "react";
-import { IProductData } from "./productApi";
-import { ActionType as ProductActionType } from "./productReducer";
+import { IProductStore, ICartStore } from "./AppStores";
 
-interface IProductContext {
-  productData: IProductData[];
-  productDispatch: React.Dispatch<ProductActionType>;
-}
-export const ProductContext = createContext<IProductContext>({
-  productData: [],
-  productDispatch: () => {},
-});
+
 export const CategoryContext = createContext<string[]>([]);
+
+export const ProductStoreContext = createContext<IProductStore | null>(null);
+export const CartStoreContext = createContext<ICartStore | null>(null);

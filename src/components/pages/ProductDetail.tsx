@@ -1,20 +1,43 @@
 import { useContext } from "react";
 import { ModeToggle } from "../mode-toggle";
-import { useParams } from "react-router-dom";
-import { ProductContext } from "../utils/AppContexts";
+import { useNavigate, useParams } from "react-router-dom";
+import { CartStoreContext, ProductStoreContext } from "../utils/AppContexts";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { addToCart, ICartProducts } from "../utils/cartAPI";
+import { IAddParams } from "./Cart";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const productContext = useContext(ProductContext);
-
-  const { productData: product } = productContext;
+  const navigate = useNavigate();
+  const productStoreContext = useContext(ProductStoreContext);
+  const cartContext = useContext(CartStoreContext);
+  const product = productStoreContext?.productData;
 
   const productData =
-    product.length > 0 ? product.find((prod) => prod.id === Number(id)) : null;
+    product!.length > 0 ? product?.find((prod) => prod.id === Number(id)) : null;
+    const {mutate : addMutator} = useMutation({
+      mutationKey : ["carts"],
+      mutationFn : ({userId, prodData} : IAddParams)=>addToCart(userId,prodData),
+      retry : false,
+      onSuccess : (data)=>{
+        console.log(data);
+        toast("Product Added to Cart successfully ", data);
+        navigate("/cart");
+      },
+      onError : (error) =>{
+        alert(error.message);
+      }
+    })
 
-  if (!productData) {
-    return <h1>Loading Product Details....</h1>;
-  }
+    const handleAddToCart = ()=>{
+      const prodData:ICartProducts = {
+        productId : Number(id),
+        quantity : 1
+      }
+      addMutator({userId :1, prodData})
+      cartContext?.cartAdd(prodData);
+    }
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -37,12 +60,12 @@ const ProductDetail = () => {
               <div className="h-[460px] rounded-lg bg-muted">
                 <img
                   className="w-full h-full object-contain rounded-lg"
-                  src={productData.image}
+                  src={productData?.image}
                   alt="Product Image"
                 />
               </div>
               <div className="flex gap-4 mt-4">
-                <button className="flex-grow bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+                <button onClick={handleAddToCart} className="flex-grow bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
                   Add to Cart
                 </button>
               </div>
@@ -50,12 +73,12 @@ const ProductDetail = () => {
 
             <div className="md:w-1/2">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                {productData.title}
+                {productData?.title}
               </h2>
 
               <div className="flex flex-wrap gap-4 text-gray-700 dark:text-gray-300 mb-4">
                 <div>
-                  <span className="font-bold">Price:</span> ${productData.price}
+                  <span className="font-bold">Price:</span> ${productData?.price}
                 </div>
                 <div>
                   <span className="font-bold">Availability:</span> In Stock
@@ -67,7 +90,7 @@ const ProductDetail = () => {
                   Product Description:
                 </span>
                 <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                  {productData.description}
+                  {productData?.description}
                 </p>
               </div>
             </div>

@@ -22,7 +22,7 @@ import {
 
 import { useContext } from "react";
 import { Button } from "../ui/button";
-import { CategoryContext, ProductContext } from "../utils/AppContexts";
+import { CategoryContext, ProductStoreContext } from "../utils/AppContexts";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ModeToggle } from "../mode-toggle";
@@ -49,13 +49,14 @@ const EditProducts = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const categoryData = useContext(CategoryContext);
-  const productContext = useContext(ProductContext);
+  const productStoreContext = useContext(ProductStoreContext);
 
-  const { productData, productDispatch } = productContext;
+  // const { productData, productDispatch } = productContext;
+  const productData = productStoreContext?.productData;
 
   const productDetails =
-    productData.length > 0
-      ? productData.find((prod) => prod.id === Number(id))
+    productData!.length > 0
+      ? productData!.find((prod) => prod.id === Number(id))
       : null;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -91,11 +92,8 @@ const EditProducts = () => {
       category: values.category,
       price: Number(values.price),
     };
-    productDispatch({
-      type: "UpdateProduct",
-      updatedProduct,
-    });
     mutate(updatedProduct);
+    productStoreContext?.productUpdate(updatedProduct);
   };
 
   return (

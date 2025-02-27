@@ -5,18 +5,20 @@ import EditProducts from "./components/pages/EditProducts";
 import ProductDetail from "./components/pages/ProductDetail";
 import Layout from "./components/layout/layout";
 import { ThemeProvider } from "./components/theme-provider";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import {
   getAllProducts,
   getCategories,
   IProductData,
 } from "./components/utils/productApi";
 import { useQuery } from "@tanstack/react-query";
-import { productReducer } from "./components/utils/productReducer";
 import {
+  CartStoreContext,
   CategoryContext,
-  ProductContext,
+  ProductStoreContext,
 } from "./components/utils/AppContexts";
+import { useCartStore, useProductStore } from "./components/utils/AppStores";
+import Cart from "./components/pages/Cart";
 
 function App() {
   const { data: product } = useQuery<IProductData[]>({
@@ -35,32 +37,32 @@ function App() {
     refetchOnMount: false,
   });
 
-  const [productData, productDispatch] = useReducer(
-    productReducer,
-    product ?? [],
-  );
+  const productStore = useProductStore();
+  const cartStore = useCartStore();
 
   useEffect(() => {
-    if (product)
-      productDispatch({ type: "AddProductList", productData: product });
+    if (product) productStore.productList(product);
   }, [product]);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <ProductContext.Provider value={{ productData, productDispatch }}>
-        <CategoryContext.Provider value={categoryData ?? []}>
-          <Router>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/add" element={<AddProduct />} />
-                <Route path="/edit/:id" element={<EditProducts />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-              </Routes>
-            </Layout>
-          </Router>
-        </CategoryContext.Provider>
-      </ProductContext.Provider>
+      <ProductStoreContext.Provider value={productStore}>
+        <CartStoreContext.Provider value={cartStore}>
+          <CategoryContext.Provider value={categoryData ?? []}>
+            <Router>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/add" element={<AddProduct />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/edit/:id" element={<EditProducts />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                </Routes>
+              </Layout>
+            </Router>
+          </CategoryContext.Provider>
+        </CartStoreContext.Provider>
+      </ProductStoreContext.Provider>
     </ThemeProvider>
   );
 }

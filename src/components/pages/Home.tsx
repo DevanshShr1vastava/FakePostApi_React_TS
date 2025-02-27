@@ -31,7 +31,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@radix-ui/react-dropdown-menu";
-import { CategoryContext, ProductContext } from "../utils/AppContexts";
+import { CategoryContext, ProductStoreContext } from "../utils/AppContexts";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -41,10 +41,12 @@ const Home = () => {
   );
   const [category, setCategory] = useState<string[]>();
 
-  const productContext = useContext(ProductContext);
+  const productStoreContext = useContext(ProductStoreContext);
+
   const categoryData = useContext(CategoryContext);
 
-  const { productData: product, productDispatch } = productContext;
+  
+  const product = productStoreContext?.productData;
 
   const filteredData = selectedCategory
     ? product?.filter(
@@ -65,10 +67,7 @@ const Home = () => {
   });
 
   const handleDelete = (id: number) => {
-    productDispatch({
-      type: "DeleteProduct",
-      id,
-    });
+    productStoreContext?.productDelete(id);
     mutate(id);
   };
 
@@ -117,7 +116,7 @@ const Home = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col items-center justify-between">
-              <img className="h-48 w-full object-contain" src={prod.image} />
+              <img className="h-48 w-full object-contain" alt="productImageAlternateText" src={prod.image} />
               <div className="mt-4 flex flex-col gap-2 w-full">
                 <Button variant="default" asChild>
                   <Link to={`/product/${prod.id}`}>Show Product</Link>
