@@ -22,7 +22,7 @@ import {
 
 import { useContext } from "react";
 import { Button } from "../ui/button";
-import { CategoryContext, ProductContext } from "../utils/AppContexts";
+import { CategoryContext, ProductStoreContext } from "../utils/AppContexts";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "../mode-toggle";
@@ -58,10 +58,10 @@ const AddProduct = () => {
     },
   });
 
-  const productContext = useContext(ProductContext);
+  const productStoreContext = useContext(ProductStoreContext);
   const categoryData = useContext(CategoryContext);
 
-  const { productData, productDispatch } = productContext;
+  const productData = productStoreContext?.productData;
 
   const { mutate } = useMutation({
     mutationFn: (newProduct: IProductData) => addNewProduct(newProduct),
@@ -78,15 +78,15 @@ const AddProduct = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const newProduct: IProductData = {
-      id: productData.length + 2,
+      id: productData!.length + 2,
       title: values.title,
       description: values.description,
       image: values.image,
       category: values.category,
       price: Number(values.price),
     };
-    productDispatch({ type: "AddProduct", newProduct });
     mutate(newProduct);
+    productStoreContext?.productAdd(newProduct);
   };
 
   return (
