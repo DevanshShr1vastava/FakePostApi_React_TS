@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+### Fake Post API E-commerce Application
+- Built using vite - react - typescript
+- uses shadcn UI library
+- Currently implements product APIs using axios and context API
+- Modular Interface
+- Dark and Light Theme toggle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+#### UI demonstration
 
-Currently, two official plugins are available:
+![UIDemonstration-ezgif com-crop](https://github.com/user-attachments/assets/6e284242-9abc-4f24-befb-9f6514ef3174)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Responsive Sidebar demonstrations
 
-## Expanding the ESLint configuration
+![SidebarFullScreen-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/f4165082-3280-4b70-bfe9-f6d520d7a7d3)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+![ResponsiveSideBar-ezgif com-crop](https://github.com/user-attachments/assets/5290c453-1082-4a3f-896b-61294ff05c9f)
 
-- Configure the top-level `parserOptions` property like this:
+#### Show Product
+- redirects and uses url parameters to get product details
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+![ShowProduct-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/5c582571-a320-4485-97d7-6fcc94f52fea)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+#### Delete Product
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+![DeletingProduct-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0c5d5c27-8dcb-41be-b9d1-7f1dc990087b)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+#### Edit Product
+
+![EditProduct-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/9f04fd1f-42bf-4e0f-81ba-5234faa0c299)
+
+#### Adding Product
+- you can add new product and work with it like any other product since it is managed using contextAPI
+
+
+![AddProductPart1](https://github.com/user-attachments/assets/471727b5-f5a2-441f-af0e-a65ba69384ef)
+
+![AddProductPart2](https://github.com/user-attachments/assets/7322be52-3e17-4439-b5ca-d3b447f810ab)
+
+![AddProductPart3](https://github.com/user-attachments/assets/10af30c3-1998-42cf-8c1c-999a64c47ef5)
